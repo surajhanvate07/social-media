@@ -16,18 +16,6 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 
 	@Override
-	public User registerUser(User user) {
-		User newUser = new User();
-		newUser.setId(user.getId());
-		newUser.setEmail(user.getEmail());
-		newUser.setFirstName(user.getFirstName());
-		newUser.setLastName(user.getLastName());
-		newUser.setPassword(user.getPassword());
-
-		return userRepository.save(newUser);
-	}
-
-	@Override
 	public User findUserById(Integer userId) throws Exception {
 		Optional<User> user1 = userRepository.findById(userId);
 		if (user1.isPresent()) {
