@@ -33,6 +33,7 @@ public class PostServiceImpl implements PostService {
 		newPost.setCreatedAt(LocalDateTime.now());
 		newPost.setUser(userService.findUserById(userId));
 
+		postRepository.save(newPost);
 		return newPost;
 	}
 
@@ -77,7 +78,7 @@ public class PostServiceImpl implements PostService {
 			user.getSavedPost().add(post);
 		}
 		userRepository.save(user);
-		
+
 		return post;
 	}
 
