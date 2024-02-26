@@ -21,14 +21,14 @@ public class UserController {
 		return userService.registerUser(user);
 	}
 
-	@GetMapping("/users")
+	@GetMapping("/api/users")
 	public List<User> getUsers() {
 		List<User> userList = userRepository.findAll();
 
 		return userList;
 	}
 
-	@GetMapping("/users/{userId}")
+	@GetMapping("/api/users/{userId}")
 	public User getUserById(@PathVariable("userId") Integer userId) throws Exception {
 		return userService.findUserById(userId);
 	}
@@ -38,17 +38,17 @@ public class UserController {
 //		return userService.findUserByEmail(email);
 //	}
 
-	@PutMapping("/users/{userId}")
+	@PutMapping("/api/users/{userId}")
 	public User updateUser(@RequestBody User user, @PathVariable("userId") Integer userId) throws Exception {
 		return userService.updateUser(user, userId);
 	}
 
-	@PutMapping("/users/follow/{userId1}/{userId2}")
+	@PutMapping("/api/users/follow/{userId1}/{userId2}")
 	public User followUserHandler(@PathVariable Integer userId1, @PathVariable Integer userId2) throws Exception {
 		return userService.followUser(userId1, userId2);
 	}
 
-	@GetMapping("/users/search")
+	@GetMapping("/api/users/search")
 	public List<User> searchUser(@RequestParam("query") String query) {
 		return userService.searchUser(query);
 	}
