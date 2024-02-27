@@ -1,9 +1,11 @@
 package com.suraj.service.impl;
 
+import com.suraj.config.JwtProvider;
 import com.suraj.model.User;
 import com.suraj.repository.UserRepository;
 import com.suraj.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +16,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	public User findUserById(Integer userId) throws Exception {
@@ -30,18 +35,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User followUser(Integer userId1, Integer userId2) throws Exception {
-		User user1 = findUserById(userId1);
+	public User followUser(Integer currentUserId, Integer userId2) throws Exception {
+		User currentUser = findUserById(currentUserId);
 
 		User user2 = findUserById(userId2);
 
-		user2.getFollowers().add(user1.getId());
-		user1.getFollowing().add(user2.getId());
+		user2.getFollowers().add(currentUser.getId());
+		currentUser.getFollowing().add(user2.getId());
 
-		userRepository.save(user1);
+		userRepository.save(currentUser);
 		userRepository.save(user2);
 
-		return user1;
+		return currentUser;
 	}
 
 	@Override
@@ -62,7 +67,10 @@ public class UserServiceImpl implements UserService {
 			user1.setEmail(user.getEmail());
 		}
 		if (user.getPassword() != null) {
-			user1.setPassword(user.getPassword());
+			user1.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		if(user.getGender() != null) {
+			user1.setGender(user.getGender());
 		}
 
 		User updatedUser = userRepository.save(user1);
@@ -73,5 +81,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> searchUser(String query) {
 		return userRepository.searchUser(query);
+	}
+
+	@Override
+	public User findUserByJwt(String jwt) {
+		String email = JwtProvider.getEmailFromJwtToken(jwt);
+		User user = userRepository.findByEmail(email);
+		return user;
 	}
 }
