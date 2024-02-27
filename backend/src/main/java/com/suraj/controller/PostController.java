@@ -28,7 +28,7 @@ public class PostController {
 		return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
 	}
 
-	@DeleteMapping("/posts/{postId}")
+	@DeleteMapping("/api/posts/{postId}")
 	public ResponseEntity<APIResponse> deletePost(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String jwt) throws Exception {
 		User currentUser = userService.findUserByJwt(jwt);
 		String message = postService.deletePost(postId, currentUser.getId());
@@ -36,31 +36,31 @@ public class PostController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping("/posts/{postId}")
+	@GetMapping("/api/posts/{postId}")
 	public ResponseEntity<Post> findPostById(@PathVariable("postId") Integer postId) throws Exception {
 		return new ResponseEntity<>(postService.findPostById(postId), HttpStatus.OK);
 	}
 
-	@GetMapping("/posts/user/{userId}")
+	@GetMapping("/api/posts/user/{userId}")
 	public ResponseEntity<List<Post>> getUsersPost(@PathVariable("userId") Integer userId) {
 		List<Post> posts = postService.findPostByUserId(userId);
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
-	@GetMapping("/posts")
+	@GetMapping("/api/posts")
 	public ResponseEntity<List<Post>> getAllPosts() {
 		List<Post> posts = postService.findAllPosts();
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
-	@PutMapping("/posts/saved/{postId}")
+	@PutMapping("/api/posts/saved/{postId}")
 	public ResponseEntity<Post> savedPostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String jwt) throws Exception {
 		User currentUser = userService.findUserByJwt(jwt);
 		Post post = postService.savedPost(postId, currentUser.getId());
 		return new ResponseEntity<>(post, HttpStatus.ACCEPTED);
 	}
 
-	@PutMapping("/posts/liked/{postId}")
+	@PutMapping("/api/posts/liked/{postId}")
 	public ResponseEntity<Post> likedPostHandler(@PathVariable("postId") Integer postId, @RequestHeader("Authorization") String jwt) throws Exception {
 		User currentUser = userService.findUserByJwt(jwt);
 		Post post = postService.likedPost(postId, currentUser.getId());
