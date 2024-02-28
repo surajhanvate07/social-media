@@ -1,6 +1,7 @@
 package com.suraj.service.impl;
 
 import com.suraj.config.JwtProvider;
+import com.suraj.exception.UserException;
 import com.suraj.model.User;
 import com.suraj.repository.UserRepository;
 import com.suraj.service.UserService;
@@ -21,12 +22,12 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Override
-	public User findUserById(Integer userId) throws Exception {
+	public User findUserById(Integer userId) throws UserException {
 		Optional<User> user1 = userRepository.findById(userId);
 		if (user1.isPresent()) {
 			return user1.get();
 		}
-		throw new Exception("User not exists with given user id " + userId);
+		throw new UserException("User not exists with given user id " + userId);
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User followUser(Integer currentUserId, Integer userId2) throws Exception {
+	public User followUser(Integer currentUserId, Integer userId2) throws UserException {
 		User currentUser = findUserById(currentUserId);
 
 		User user2 = findUserById(userId2);
@@ -50,10 +51,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(User user, Integer userId) throws Exception {
+	public User updateUser(User user, Integer userId) throws UserException {
 		Optional<User> oldUser = userRepository.findById(userId);
 		if (oldUser.isEmpty()) {
-			throw new Exception("User not exists with given user id " + userId);
+			throw new UserException("User not exists with given user id " + userId);
 		}
 
 		User user1 = oldUser.get();

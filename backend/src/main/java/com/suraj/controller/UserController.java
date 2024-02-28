@@ -1,5 +1,6 @@
 package com.suraj.controller;
 
+import com.suraj.exception.UserException;
 import com.suraj.model.User;
 import com.suraj.repository.UserRepository;
 import com.suraj.service.UserService;
@@ -24,7 +25,7 @@ public class UserController {
 	}
 
 	@GetMapping("/api/users/{userId}")
-	public User getUserById(@PathVariable("userId") Integer userId) throws Exception {
+	public User getUserById(@PathVariable("userId") Integer userId) throws UserException {
 		return userService.findUserById(userId);
 	}
 
@@ -34,13 +35,13 @@ public class UserController {
 //	}
 
 	@PutMapping("/api/users")
-	public User updateUser(@RequestBody User user, @RequestHeader("Authorization") String jwt) throws Exception {
+	public User updateUser(@RequestBody User user, @RequestHeader("Authorization") String jwt) throws UserException {
 		User currentUser = userService.findUserByJwt(jwt);
 		return userService.updateUser(user, currentUser.getId());
 	}
 
 	@PutMapping("/api/users/follow/{userId2}")
-	public User followUserHandler(@RequestHeader("Authorization") String jwt, @PathVariable Integer userId2) throws Exception {
+	public User followUserHandler(@RequestHeader("Authorization") String jwt, @PathVariable Integer userId2) throws UserException {
 		User currentUser = userService.findUserByJwt(jwt);
 		return userService.followUser(currentUser.getId(), userId2);
 	}

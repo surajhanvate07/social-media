@@ -47,7 +47,7 @@ public class AppConfig {
 				configuration.setAllowedHeaders(Collections.singletonList("*"));
 				configuration.setExposedHeaders(List.of("Authorization"));
 				configuration.setMaxAge(3600L);
-				
+
 				return configuration;
 			}
 		};
